@@ -1,94 +1,101 @@
-import React, { useState, useEffect } from "react";
-import styles from "./Genre.module.css";
-import { genres } from "../../Assets/data/genres";
-import { color } from "../../Assets/data/color";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from 'react'
+import actionBG from "../../Assets/action.png"
+import styles from './Genre.module.css'
 
-function GenrePage() {
-	const [selectedGenres, setSelectedGenres] = useState([]); 
-	const [lengthWarning, setLengthWarning] = useState(false);
-	const navigate = useNavigate();
+export default function Genre() {
+	const [genres, setGenres] = useState([
+		{
+			title: "Action",
+			bgImage: actionBG,
+		},
+		{
+			title: "Drama",
+			bgImage: actionBG,
+		},
+		{
+			title: "Romance",
+			bgImage: actionBG,
+		},
+		{
+			title: "Thriller",
+			bgImage: actionBG,
+		},
+		{
+			title: "Western",
+			bgImage: actionBG,
+		},
+		{
+			title: "Horror",
+			bgImage: actionBG,
+		},
+		{
+			title: "Fantasy",
+			bgImage: actionBG,
+		},
+		{
+			title: "Music",
+			bgImage: actionBG,
+		},
+		{
+			title: "Fiction",
+			bgImage: actionBG,
+		},
 
-	useEffect(() => {
-		if (selectedGenres.length >= 3) {
-			setLengthWarning(false);
-		}
-		localStorage.setItem("selectedGenres", JSON.stringify(selectedGenres));
-		console.log(localStorage.getItem("selectedGenres"));
-	}, [selectedGenres]);
+	]);
+	const [selectedGenres, setSelectedGenres] = useState([1, 3, 5]);
 
-	const removeGenre = (index) => {
-		console.log(index); // 3
-		const newGenres = selectedGenres.filter((item) => item !== index); // 5 !== 3
-		setSelectedGenres(newGenres);
+	const bgColors =  [
+		"#ff5208",
+		"#d7a4ff",
+		"#148a08",
+		"#84c2ff",
+		"#902500",
+		"#ff4ade",
+		"#e61e32",
+		"#6cd061"
+	]
+	const removeGenres = (index) => {
+		//console.log(index);
+		const newGenres = selectedGenres.filter((item) => item !== index);
+		//console.log(newGenres)
+		setSelectedGenres(newGenres)
 	};
 
 	const selectGenre = (index) => {
-		if (selectedGenres.includes(index)) {
-			setSelectedGenres((prev) => prev.filter((item) => item !== index));
-		} else {
-			setSelectedGenres((prev) => [...prev, index]);
-		}
-	};
-
-	const handleNext = () => {
-		if (selectedGenres.length < 3) {
-			setLengthWarning(true);
-		} else {
-			setLengthWarning(false);
-			navigate("/");
-		}
-	};
+		setSelectedGenres([...selectedGenres, index]);
+	}
 
 	return (
 		<div className={styles.page}>
 			<div className={styles.left}>
-				<div className={styles.headers}>
-					<h1 className={styles.leftHeader}>Super app</h1>
-					<h2 className={styles.leftSubHeader}>
-						Choose your <br /> entertainment <br /> category
-					</h2>
-				</div>
-
+				<h2>Super App</h2>
+				<h1>Choose Your Entertainment Category</h1>
 				<div className={styles.selected}>
-					{selectedGenres.map((item, index) => (
-						<div key={item} className={styles.selectedGenre}>
+					{selectedGenres.map((item,index) => {
+						return <div key={item} className={styles.selectedGenre} style={{backgroundColor:bgColors[index]}}>
 							{genres[item].title}
-							<button onClick={() => removeGenre(item)}>x</button>
+							<img src={genres[item].bgImage} alt=" " />
+							<button onClick={() => removeGenres(item)}>X</button>
+
 						</div>
-					))}
+					})}
 				</div>
-				{lengthWarning && (
-					<div className={styles.warning}>
-						 <div> &nbsp;Minimum 3 category required</div>
-					</div>
-				)}
 			</div>
 			<div className={styles.right}>
 				<div className={styles.genreGrid}>
-					{genres.map((genre, index) => (
-						<div
+					{genres.map((genre, index) => {
+						return <div
 							key={index}
 							className={styles.genreCard}
 							onClick={() => selectGenre(index)}
-							style={{
-								backgroundColor: color[index],
-								outline: selectedGenres.includes(index)
-									? "4px solid green"
-									: "",
-							}}
+							style={{backgroundColor:bgColors[index]}}
 						>
-							<div className={styles.title}> {genre.title}</div>
-							<img src={genre.bgImage} alt="backgroundImage" />
+							{genre.title}
+							<img src={genre.bgImage} alt="" />
 						</div>
-					))}
+					})}
 				</div>
-				<button className={styles.button} onClick={handleNext}>
-					Next Page
-				</button>
 			</div>
 		</div>
-	);
+	)
 }
-
-export default GenrePage;
