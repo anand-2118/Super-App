@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import styles from './Hompage.module.css';
+import styles from './Homepage.module.css';
 import UserAvatar from '../../Assets/image 14.png';
 import axios from 'axios';
 
 export default function HomePage() {
     const WEATHER_API_KEY = process.env.REACT_APP_WEATHER_API_KEY;
-    const NEWS_API_KEY = process.env.REACT_APP__NEWS_API_KEY;
+    const NEWS_API_KEY = process.env.REACT_APP_NEWS_API_KEY;
     const [user, setUser] = useState(JSON.parse(localStorage.getItem("currentUser")) || {});
     const [selectedGenres, setSelectedGenres] = useState(JSON.parse(localStorage.getItem("selectedGenres")) || []);
-    const [weather, setWeather] = useState(null);
-    const [news, setNews] = useState(null);
+    const [weather, setWeather] = useState()
+    const [news,setNews] = useState();
+
 
     const genres = [
         { title: "Action" },
@@ -24,54 +25,57 @@ export default function HomePage() {
     ];
 
     useEffect(() => {
-        setUser(JSON.parse(localStorage.getItem("currentUser")) || {});
-        setSelectedGenres(JSON.parse(localStorage.getItem("selectedGenres")) || []);
-    }, []);
-
-    useEffect(() => {
+        setUser(JSON.parse(localStorage.getItem("currentUser")));
+        // console.log(user);
+        setSelectedGenres(JSON.parse(localStorage.getItem("selectedGenres")));
+        // console.log(selectedGenres)
         fetchWeatherData();
-        console.log(fetchNewsData)
         fetchNewsData();
-        console.log(fetchNewsData)
     }, []);
 
     const fetchWeatherData = async () => {
         try {
             const { data, status } = await axios.get(
-                `https://api.weatherapi.com/v1/current.json?key=${WEATHER_API_KEY}&q=auto:ip`
+                `https://api.weatherapi.com/v1/current.json?key=${WEATHER_API_KEY}&q=delhi`
+                //"https://api.weatherapi.com/v1/current.json?key=f0e14dc859824baa96185859241106&q=delhi"
+                
             );
             if (status === 200) {
-                setWeather(data.current);
+                setWeather(data.current)
             }
-        } catch (error) {
-            console.error('Error fetching weather data:', error);
+        }
+        catch (error) {
+            console.error("Failed to fetch weather data", error);
         }
     };
-
     const fetchNewsData = async () => {
         try {
-            const { data, status } = await axios.get(
-                `https://newsapi.org/v2/top-headlines?country=us&apiKey=${NEWS_API_KEY}`
+            const { data,status } = await axios.get(
+                 `https://newsapi.org/v2/top-headlines?country=us&apiKey=${NEWS_API_KEY}`
+               //"https://newsapi.org/v2/top-headlines?country=us&apiKey=1e03948c10694d84af3eb76ec1199b84"
             );
-            if (status === 200) {
-                setNews(data);
-            }
-        } catch (error) {
-            console.error('Error fetching news data:', error);
+            
+                setNews(data.articles)
+               console.log(status)
+            
+        }
+        catch (error) {
+            console.error("Failed to fetch news data", error);
         }
     };
 
     useEffect(() => {
-        console.log(weather);
-        console.log(news);
-    }, [weather, news]);
+        if (weather) {
+            const { condition, humidity, temp_c, gust_kph, wind_kph } = weather;
 
-    useEffect(() => {
-        selectedGenres.forEach((genre) => {
-           // console.log(genres[genre]);
-        });
-        //console.log(user);
-    }, [selectedGenres, user]);
+            console.log(condition.text, humidity, temp_c, gust_kph, wind_kph)
+        }
+        if(news){
+            console.log(news)
+        }
+        
+    }, [weather,news])
+
 
     return (
         <div className={styles.page}>
@@ -94,23 +98,34 @@ export default function HomePage() {
                     </div>
                 </div>
                 <div className={styles.weatherWidget}>
-                    {weather && (
-                        <div>
-                            <p>{weather.condition.text}</p>
-                            <p>{weather.temp_c}°C</p>
-                        </div>
-                    )}
+                {weather && (
+                    <div className={styles.weatherWidget}>
+                        <h3>Weather in Delhi</h3>
+                        <p>{weather.condition.text}</p>
+                        <p>{weather.temp_c}°C</p>
+                        <p>pressure: {weather.pressure_mb}</p>
+                        <p>{weather.gust_kph}</p>
+                        <p>{weather.wind_kph}</p>
+                    </div>
+                )}
                 </div>
+
             </div>
             <div className={styles.right}>
-                <div className={styles.newsWidget}>
-                    {news && news.articles.map((article, index) => (
-                        <div key={index}>
-                            <h3>{article.title}</h3>
-                            <p>{article.description}</p>
-                        </div>
-                    ))}
-                </div>
+            {news && (
+                    <div className={styles.newsWidget}>
+                        <h3>Top News Headlines</h3>
+                        {news.map((article, index) => (
+                            <div key={index} className={styles.newsArticle}>
+                                <h4>{article.title}</h4>
+                                <p>By {article.author || "Unknown"}</p>
+                                <p>{article.description}</p>
+                                <a href={article.url} target="_blank" rel="noopener noreferrer">Read more</a>
+                            </div>
+                        ))}
+                    </div>
+                )}
+                
             </div>
         </div>
     );
