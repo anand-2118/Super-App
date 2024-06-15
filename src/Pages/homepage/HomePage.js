@@ -37,26 +37,26 @@ export default function HomePage() {
         try {
             const { data, status } = await axios.get(
                 `https://api.weatherapi.com/v1/current.json?key=${WEATHER_API_KEY}&q=delhi`
-                //"https://api.weatherapi.com/v1/current.json?key=f0e14dc859824baa96185859241106&q=delhi"
                 
             );
             if (status === 200) {
                 setWeather(data.current)
+                console.log(WEATHER_API_KEY)
             }
         }
         catch (error) {
             console.error("Failed to fetch weather data", error);
+            console.log(WEATHER_API_KEY)
         }
     };
     const fetchNewsData = async () => {
         try {
             const { data,status } = await axios.get(
                  `https://newsapi.org/v2/top-headlines?country=us&apiKey=${NEWS_API_KEY}`
-               //"https://newsapi.org/v2/top-headlines?country=us&apiKey=1e03948c10694d84af3eb76ec1199b84"
             );
             
                 setNews(data.articles)
-               console.log(status)
+               console.log(data)
             
         }
         catch (error) {
