@@ -1,50 +1,16 @@
-import React, { useState,useEffect } from 'react'
-import actionBG from "../../Assets/action.png"
-import styles from './Genre.module.css'
+import React, { useState, useEffect } from "react";
+import styles from "./Genre.module.css";
+import { IoIosWarning } from "react-icons/io";
+import { genres } from "../../Assets/data/genres";
+import { color } from "../../Assets/data/color";
+import { useNavigate } from "react-router-dom";
+import { set } from "mongoose";
 
-export default function Genre() {
-	const [genres, setGenres] = useState([
-		{
-			title: "Action",
-			bgImage: actionBG,
-		},
-		{
-			title: "Drama",
-			bgImage: actionBG,
-		},
-		{
-			title: "Romance",
-			bgImage: actionBG,
-		},
-		{
-			title: "Thriller",
-			bgImage: actionBG,
-		},
-		{
-			title: "Western",
-			bgImage: actionBG,
-		},
-		{
-			title: "Horror",
-			bgImage: actionBG,
-		},
-		{
-			title: "Fantasy",
-			bgImage: actionBG,
-		},
-		{
-			title: "Music",
-			bgImage: actionBG,
-		},
-		{
-			title: "Fiction",
-			bgImage: actionBG,
-		},
-
-	]);
-	const [selectedGenres, setSelectedGenres] = useState([]);
-    
-	const [lengthWarning,setLengthWarning] = useState(false);
+export default function GenrePage() {
+	const [selectedGenres, setSelectedGenres] = useState([]); // set methods are ALWAYS asynchronous
+	const [person, setperson] = useState({ name: "John", age: 25 });
+	const [lengthWarning, setLengthWarning] = useState(false);
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		if (selectedGenres.length >= 3) {
@@ -53,88 +19,79 @@ export default function Genre() {
 		localStorage.setItem("selectedGenres", JSON.stringify(selectedGenres));
 		console.log(localStorage.getItem("selectedGenres"));
 	}, [selectedGenres]);
-    
 
-	const bgColors =  [
-		"#ff5208",
-		"#d7a4ff",
-		"#148a08",
-		"#84c2ff",
-		"#902500",
-		"#ff4ade",
-		"#e61e32",
-		"#6cd061"
-	]
-	const removeGenres = (index) => {
-		//console.log(index);
-		const newGenres = selectedGenres.filter((item) => item !== index);
-		//console.log(newGenres)
-		setSelectedGenres(newGenres)
-		if (newGenres.length < 3) {
-			setLengthWarning(true); // Show warning if less than 3 categories are selected
-		  } else {
-			setLengthWarning(false)};
+	const removeGenre = (index) => {
+		console.log(index); // 3
+		const newGenres = selectedGenres.filter((item) => item !== index); // 5 !== 3
+		setSelectedGenres(newGenres);
 	};
 
 	const selectGenre = (index) => {
-		
 		if (selectedGenres.includes(index)) {
 			setSelectedGenres((prev) => prev.filter((item) => item !== index));
 		} else {
 			setSelectedGenres((prev) => [...prev, index]);
 		}
-	}
+	};
 
 	const handleNext = () => {
-		if(selectedGenres.length+1<3){
+		if (selectedGenres.length < 3) {
 			setLengthWarning(true);
-		}
-		else {
+		} else {
 			setLengthWarning(false);
+			navigate("/homepage");
 		}
-	}
+	};
 
 	return (
 		<div className={styles.page}>
 			<div className={styles.left}>
-				<h1 className={styles.leftHeader}>Super app</h1>
+				<div className={styles.headers}>
+					<h1 className={styles.leftHeader}>Super app</h1>
 					<h2 className={styles.leftSubHeader}>
 						Choose your <br /> entertainment <br /> category
 					</h2>
+				</div>
 
 				<div className={styles.selected}>
-					{selectedGenres.map((item,index) => {
-						return <div key={item} className={styles.selectedGenre} style={{backgroundColor:bgColors[index]}}>
+					{selectedGenres.map((item, index) => (
+						<div key={item} className={styles.selectedGenre}>
 							{genres[item].title}
-							<button onClick={() => removeGenres(item)}>X</button>
-
+							<button onClick={() => removeGenre(item)}>x</button>
 						</div>
-					})}
-					
+					))}
 				</div>
 				{lengthWarning && (
 					<div className={styles.warning}>
-						 <div> &nbsp;Minimum 3 category required</div>
+						<IoIosWarning /> <div> &nbsp;Minimum 3 category required</div>
 					</div>
 				)}
 			</div>
 			<div className={styles.right}>
 				<div className={styles.genreGrid}>
-					{genres.map((genre, index) => {
-						return <div
+					{genres.map((genre, index) => (
+						<div
 							key={index}
 							className={styles.genreCard}
 							onClick={() => selectGenre(index)}
-							style={{backgroundColor:bgColors[index]}}
+							style={{
+								backgroundColor: color[index],
+								outline: selectedGenres.includes(index)
+									? "4px solid green"
+									: "",
+							}}
 						>
-							{genre.title}
-							<img src={genre.bgImage} alt="" />
+							<div className={styles.title}> {genre.title}</div>
+							<img src={genre.bgImage} alt="background Image" />
 						</div>
-					})}
+					))}
 				</div>
-<button className={styles.button} onClick={handleNext}>
-					Next Page
-				</button>			</div>
+				<button className={styles.button} 
+				onClick={handleNext}>
+				Next Page
+				</button>
+			</div>
 		</div>
-	)
+	);
 }
+
