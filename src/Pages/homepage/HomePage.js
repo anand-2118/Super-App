@@ -8,7 +8,7 @@ import NewsWidget from "../../components/newsWidget/NewsWidget";
 import { useNavigate } from "react-router-dom";
 
 
-export default function Homepage() {
+export default function HomePage() {
 	const [user, setUser] = useState();
 	const [selectedGenres, setSelectedGenres] = useState();
 	const [weather, setWeather] = useState();
