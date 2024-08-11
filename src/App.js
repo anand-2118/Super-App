@@ -1,10 +1,10 @@
 import './App.css';
-import Dashboard from './pages/dashboard/Dashboard';
 import Genre from './pages/genre/Genre';
 import HomePage from './pages/homepage/HomePage';
 import Registration from './pages/registration/Registration';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import PromotionPage from "./pages/promotion/PromotionPage";
+import Dashboard from './pages/dashboard/Dashboard';
 
 function App() {
   return (
