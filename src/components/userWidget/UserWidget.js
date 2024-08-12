@@ -24,8 +24,8 @@ export default function UserWidget({ user, selectedGenres, type }) {
 					<div className={styles.genreGrid}>
 						{selectedGenres
 							?.filter((_genre, index) => index < 4)
-							?.map((genre) => (
-								<div className={styles.pill}>{genres[genre].title}</div>
+							?.map((genre,index) => (
+								<div key={index} className={styles.pill}>{genres[genre].title}</div>
 							))}
 					</div>
 				)}
