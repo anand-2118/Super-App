@@ -34,7 +34,7 @@ export default function CountDownWidget() {
 					setHours((prevHours) => prevHours - 1);
 					setMinutes(59);
 					setSeconds(59);
-				} else if (seconds == 0) {
+				} else if (seconds === 0) {
 					setMinutes((minutes) => minutes - 1);
 					setSeconds(59);
 				} else {
