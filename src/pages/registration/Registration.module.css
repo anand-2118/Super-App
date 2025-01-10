@@ -1,0 +1,97 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Single+Day&display=swap');
+
+
+body{
+    background-color: black;
+    color: white;
+    overflow: auto;
+    }
+
+.page{
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    font-family: "DM Sans", sans-serif;
+    position: relative;
+    
+
+}
+.left{
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    height: 100vh;
+}
+.bgImage{
+    object-fit:cover ;
+    height: 100vh;
+    width: 50vw;
+}
+.right{
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+h2{
+    font-family: "Single Day", cursive;
+    font-size: 3rem;
+}
+
+h4{
+    font-size: 1.5rem;
+    font-weight: 200;
+}
+
+input[type="text"],
+input[type="text"],
+input[type="email"],
+input[type="tel"]
+{
+    all: unset;
+    margin-top: 2%;
+    background-color: #292929;
+    color: #656565;
+    width: 50%;
+    height: 5vh;
+    text-align: left;
+    padding-left: 10px;
+    
+}
+
+input[type="checkbox"]{
+    margin-top: 3%;
+}
+
+p{
+    width: 50%;
+    padding: 0 25%;
+}
+
+button{
+    width: 50%;
+    padding: 1%;
+    border-radius: 20px;
+    background-color: #72db73;
+    font-size: 1rem;
+    color: white;
+    font-weight: 300;
+    margin-top: 4%;
+    cursor: pointer;
+}
+
+span{
+    color: #468747;
+    cursor: pointer;
+}
+
+.leftheader{
+    position: absolute;
+    bottom: 1%;
+    left: 3%;
+    font-size: 1.5rem;
+}
+
